@@ -493,8 +493,8 @@
 
   // adjust for iPhone X
   CGFloat topLayoutMargin = JDStatusBarRootVCLayoutMargin().top;
-  if (topLayoutMargin > 0) {
-    height += topLayoutMargin;
+  if (topLayoutMargin > 0) { // For devices with notch. e.g. iPhone X
+    height += 5.0;
   }
 
   _topBar.frame = CGRectMake(0, yPos, width, height);

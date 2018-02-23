@@ -58,17 +58,35 @@
 
   // label
   CGFloat topLayoutMargin = JDStatusBarRootVCLayoutMargin().top;
-  self.textLabel.frame = CGRectMake(0,
-                                    self.textVerticalPositionAdjustment + topLayoutMargin + 1,
-                                    self.bounds.size.width,
-                                    self.bounds.size.height - topLayoutMargin - 1);
+
+  CGFloat labelX = 0;
+  CGFloat labelY = self.textVerticalPositionAdjustment + topLayoutMargin + 1;
+  CGFloat labelWidth = self.bounds.size.width;
+  CGFloat labelHeight = self.bounds.size.height - topLayoutMargin - 1;
+
+  if (topLayoutMargin > 0) { // For devices with notch. e.g. iPhone X
+    labelY = self.textVerticalPositionAdjustment + topLayoutMargin - 11.0;
+    labelHeight = self.bounds.size.height - topLayoutMargin + 8.0;
+  }
+
+  self.textLabel.frame = CGRectMake(labelX,
+                                    labelY,
+                                    labelWidth,
+                                    labelHeight);
 
   // activity indicator
-  if (_activityIndicatorView ) {
+  if (_activityIndicatorView) {
     CGSize textSize = [self currentTextSize];
     CGRect indicatorFrame = _activityIndicatorView.frame;
     indicatorFrame.origin.x = round((self.bounds.size.width - textSize.width)/2.0) - indicatorFrame.size.width - 8.0;
-    indicatorFrame.origin.y = ceil(1+(self.bounds.size.height - indicatorFrame.size.height + topLayoutMargin)/2.0);
+
+    CGFloat indicatorY = ceil(1+(self.bounds.size.height - indicatorFrame.size.height + topLayoutMargin)/2.0);
+    if (topLayoutMargin > 0) { // For devices with notch. e.g. iPhone X
+        indicatorY = self.bounds.size.height - indicatorFrame.size.height - 8.0/2;
+    }
+
+    indicatorFrame.origin.y = indicatorY;
+
     _activityIndicatorView.frame = indicatorFrame;
   }
 }
